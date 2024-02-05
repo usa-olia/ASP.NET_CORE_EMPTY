@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма отправки данных</title>
+</head>
+<body>
+    <form id="dataForm">
+        <label for="firstName">Имя:</label>
+        <input type="text" id="firstName" name="firstName"><br>
+
+        <label for="lastName">Фамилия:</label>
+        <input type="text" id="lastName" name="lastName"><br>
+
+        <label for="age">Возраст:</label>
+        <input type="number" id="age" name="age"><br>
+
+        <input type="submit" value="Отправить">
+    </form>
+
+    <div id="responseMessage"></div>
+
+    <script>
+        const form = document.getElementById('dataForm');
+        const responseMessageDiv = document.getElementById('responseMessage');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+
+            const response = await fetch('/api/user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded' // Установите правильный Content-Type здесь
+                },
+                body: new URLSearchParams(formData) // Преобразуем данные в URL-кодированный формат
+            });
+
+            const data = await response.json();
+            responseMessageDiv.textContent = data.text;
+        });
+    </script>
+</body>
+</html>
